@@ -29,12 +29,7 @@ function start(taskRefs) {
 
   taskRefs.needle = wrapNeedle("https://build.phonegap.com", taskRefs.options);
 
-  var keySwitch = taskRefs.options.keySwitch || false;
-  if (taskRefs.options.keySwitch) {
-    delete taskRefs.options.keySwitch;
-  }
-
-  if (taskRefs.options.keys && !keySwitch) {
+  if (taskRefs.options.keys && !taskRefs.options.keySwitch) {
     unlockKeys(taskRefs, uploadZip.bind(null, taskRefs, uploadHandler));
   } else {
     uploadZip(taskRefs, uploadHandler);
@@ -76,6 +71,11 @@ function uploadZip(taskRefs, callback) {
   } else {
     data = { file: { file: taskRefs.options.archive, content_type: "application/zip" }};
     config.multipart = true;
+  }
+
+  if (taskRefs.options.keys && taskRefs.options.keySwitch) {
+    if (!data.data) data.data = {};
+    data.data.keys = taskRefs.options.keys;
   }
 
   taskRefs.log.ok("Starting upload");
