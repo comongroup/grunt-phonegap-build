@@ -29,7 +29,12 @@ function start(taskRefs) {
 
   taskRefs.needle = wrapNeedle("https://build.phonegap.com", taskRefs.options);
 
-  if (taskRefs.options.keys) {
+  var keySwitch = taskRefs.options.keySwitch || false;
+  if (taskRefs.options.keySwitch) {
+    delete taskRefs.options.keySwitch;
+  }
+
+  if (taskRefs.options.keys && !keySwitch) {
     unlockKeys(taskRefs, uploadZip.bind(null, taskRefs, uploadHandler));
   } else {
     uploadZip(taskRefs, uploadHandler);
