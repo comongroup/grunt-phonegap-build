@@ -78,6 +78,16 @@ function uploadZip(taskRefs, callback) {
     data.data.keys = taskRefs.options.keys;
   }
 
+  if (taskRefs.options.data) {
+    if (!data.data) data.data = {};
+    Object.assign(data.data, taskRefs.options.data);
+    /*for (var i in taskRefs.options.data) {
+      if (taskRefs.options.data.hasOwnProperty(i)) {
+        data.data[i] = taskRefs.options.data[i];
+      }
+    }*/
+  }
+
   taskRefs.log.ok("Starting upload");
   taskRefs.needle.put('/api/v1/apps/' + taskRefs.options.appId, data, config, callback);
 }
